@@ -1,74 +1,40 @@
-import logo from './logo.svg';
+import { AuthContext } from './context/auth';
+import Admin from './pages/Admin';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import PrivateRoute from './routing/PrivateRoute';
 
-import React, { useCallback, useEffect, useState } from 'react';
-import './App.css';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 
-function App() {
-  const [message, setMessage] = useState(null);
-  const [isFetching, setIsFetching] = useState(false);
-  const [url] = useState('/api');
+const App = () => {
+  const existingToken = JSON.parse(localStorage.getItem('token'));
+  const [authToken, setAuthToken] = useState(existingToken);
 
-  const fetchData = useCallback(() => {
-    fetch(url)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`status ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((json) => {
-        setMessage(json.message);
-        setIsFetching(false);
-      })
-      .catch((e) => {
-        setMessage(`API call failed: ${e}`);
-        setIsFetching(false);
-      });
-  }, [url]);
-
-  useEffect(() => {
-    setIsFetching(true);
-    fetchData();
-  }, [fetchData]);
+  const setToken = (data) => {
+    localStorage.setItem('token', JSON.stringify(data));
+    setAuthToken(data);
+  };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        {process.env.NODE_ENV === 'production' ? (
-          <p>This is a production build from create-react-app.</p>
-        ) : (
-          <p>
-            Edit
-            {' '}
-            <code>src/App.js</code>
-            {' '}
-            and save to reload.
-          </p>
-        )}
-        <p>
-          {'« '}
-          <strong>{isFetching ? 'Fetching message from API' : message}</strong>
-          {' »'}
-        </p>
-        <p>
-          <a className="App-link" href="https://github.com/mars/heroku-cra-node">
-            React + Node deployment on Heroku
-          </a>
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </p>
-      </header>
-    </div>
+    <AuthContext.Provider value={{ authToken, setToken }}>
+      <Router>
+        <div>
+          <ul>
+            <li>
+              <Link to="/">Home Page</Link>
+            </li>
+            <li>
+              <Link to="/admin">Admin Page</Link>
+            </li>
+          </ul>
+          <Route exact path="/" component={Home} />
+          <Route exact path="/login" component={Login} />
+          <PrivateRoute path="/admin" component={Admin} />
+        </div>
+      </Router>
+    </AuthContext.Provider>
   );
-}
+};
 
 export default App;
