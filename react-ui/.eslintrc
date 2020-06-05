@@ -1,0 +1,23 @@
+{
+  "env": {
+    "browser": true
+  },
+  "extends": [
+    "airbnb"
+  ],
+  "rules": {
+    "strict": 0,
+    "curly": [
+      "error",
+      "all"
+    ],
+    "import/order": [
+      "error",
+      {
+        "newlines-between": "always"
+      }
+    ],
+    "no-alert": "error",
+    "no-console": "error"
+  }
+}

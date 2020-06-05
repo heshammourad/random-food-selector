@@ -1,8 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
+/* eslint-disable react/jsx-filename-extension */
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import './index.css';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
