@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 
+import './Login.css';
+
 const Login = () => {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -30,22 +32,22 @@ const Login = () => {
   }
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <Form.Group controlId="username">
-        <Form.Label>Username</Form.Label>
-        <Form.Control type="text" />
-      </Form.Group>
-      <Form.Group controlId="password">
-        <Form.Label>Password</Form.Label>
-        <Form.Control type="password" />
-      </Form.Group>
-      {isError && (
-        <Form.Control.Feedback type="invalid">Please choose a username.</Form.Control.Feedback>
-      )}
-      <Button variant="secondary" type="submit">
-        Log In
-      </Button>
-    </Form>
+    <div className="login">
+      <Form onSubmit={handleSubmit}>
+        <Form.Group controlId="username">
+          <Form.Label>Username</Form.Label>
+          <Form.Control type="text" />
+        </Form.Group>
+        <Form.Group controlId="password">
+          <Form.Label>Password</Form.Label>
+          <Form.Control type="password" />
+        </Form.Group>
+        {isError && <div className="error">Please choose a username.</div>}
+        <Button variant="secondary" type="submit">
+          Log In
+        </Button>
+      </Form>
+    </div>
   );
 };
 
