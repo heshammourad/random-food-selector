@@ -7,7 +7,7 @@ const pool = new Pool({
   }
 });
 
-const query = (text) => {
+const query = async (text) => {
   const client = await pool.connect();
   try {
     const result = await client.query(text);
