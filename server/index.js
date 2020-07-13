@@ -30,15 +30,14 @@ if (!isDev && cluster.isMaster) {
 
   app.use(helmet());
 
+  // Priority serve any static files.
+  app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
+
   app.use(basicAuth({
     users: {
       [USERNAME]: PASSWORD,
     },
-    challenge: true,
   }));
-
-  // Priority serve any static files.
-  app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
 
   // Answer API requests.
   app.get('/api', function (req, res) {
