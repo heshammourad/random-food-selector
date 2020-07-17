@@ -47,7 +47,7 @@ if (!isDev && cluster.isMaster) {
 
   app.get('/api/types', (req, res) => {
     try {
-      const result = db.query('SELECT * FROM types');
+      const result = db.query('SELECT * FROM type');
       const results = {
         types: result ? result.rows : null,
       };
