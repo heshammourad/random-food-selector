@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.19.2",
     "bootstrap": "^4.5.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
@@ -14,15 +15,17 @@
   "scripts": {
     "start-js": "react-scripts start",
     "start": "cross-env BROWSER=none npm-run-all -p watch-css start-js",
-    "build": "react-scripts build",
+    "build-js": "react-scripts build",
+    "build": "npm-run-all build-css & build-js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "build-css": "node-sass-chokidar src/ -o src/ --recursive",
-    "watch-css": "yarn build-css && node-sass-chokidar src/ -o src/ --watch",
+    "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch",
     "lint": "eslint \"./src/**/*.{js,jsx}\"",
-    "lint-fix": "yarn lint --fix",
+    "lint-fix": "npm run lint --fix",
     "stylelint": "stylelint \"**/*.scss\"",
-    "stylelint-fix": "yarn stylelint --fix"
+    "stylelint-fix": "npm run stylelint --fix",
+    "heroku": "nodemon --exec \"heroku local\" --signal SIGTERM"
   },
   "eslintConfig": {
     "extends": "react-app"
