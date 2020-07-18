@@ -39,24 +39,27 @@ if (!isDev && cluster.isMaster) {
     },
   }));
 
-  // Answer API requests.
-  app.get('/api', function (req, res) {
-    res.set('Content-Type', 'application/json');
-    res.send('{"message":"Hello from the custom server!"}');
+  var router = express.Router()
+
+  router.get('/login', async (req, res) => {
+    res.status(200).send();
   });
 
-  app.get('/api/types', (req, res) => {
+  router.get('/types', async (req, res) => {
     try {
-      const result = db.query('SELECT * FROM type');
-      const results = {
-        types: result ? result.rows : null,
-      };
-      res.send(results);
+      const result = await db.query('SELECT * FROM type');
+      if (!result) {
+        res.status(404).send();
+        return;
+      }
+      res.send(result.rows);
     } catch (err) {
-      console.error(err);
-      res.status(500).send(err);
+      console.error(err.toString());
+      res.status(500).send();
     }
   });
+
+  app.use('/api', router);
 
   // All remaining requests return the React app, so it can handle routing.
   app.get('*', function (request, response) {
