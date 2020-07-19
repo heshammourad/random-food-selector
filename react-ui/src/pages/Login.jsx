@@ -1,3 +1,4 @@
+import { login } from '../api/api';
 import { useAuth } from '../context/auth';
 
 import React, { useState } from 'react';
@@ -15,12 +16,13 @@ const Login = () => {
     setLoggedIn(true);
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
-    if (username === process.env.USERNAME && password === process.env.PASSWORD) {
-      setAuthToken(password);
+    const isValid = await login(username, password);
+    setAuthToken(true);
+    if (isValid) {
       setLoggedIn(true);
     } else {
       setIsError(true);

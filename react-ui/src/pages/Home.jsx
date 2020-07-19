@@ -1,5 +1,12 @@
-import React from 'react';
+import { useAuth } from '../context/auth';
 
-const Home = () => <div>Home Page</div>;
+import React from 'react';
+import { Redirect } from 'react-router-dom';
+
+const Home = () => {
+  const { authToken } = useAuth();
+
+  return <Redirect to={authToken ? '/types' : '/login'} />;
+};
 
 export default Home;
