@@ -21,7 +21,7 @@ const Login = () => {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     const isValid = await login(username, password);
-    setAuthToken(true);
+    setAuthToken(isValid);
     if (isValid) {
       setLoggedIn(true);
     } else {
