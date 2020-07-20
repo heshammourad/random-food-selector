@@ -6,6 +6,15 @@ const instance = axios.create({
   baseURL: '/api',
 });
 
+instance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    // eslint-disable-next-line no-console
+    console.error(error.toString());
+    return Promise.reject(error);
+  },
+);
+
 const token = localStorage.getItem('token');
 if (token) {
   const auth = JSON.parse(token);
@@ -22,8 +31,15 @@ export const login = async (username, password) => {
 
     return true;
   } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error(err.toString());
     return false;
+  }
+};
+
+export const getData = async (path) => {
+  try {
+    const { data } = await instance.get(path);
+    return data;
+  } catch (err) {
+    return null;
   }
 };
