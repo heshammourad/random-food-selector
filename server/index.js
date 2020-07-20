@@ -33,13 +33,13 @@ if (!isDev && cluster.isMaster) {
   // Priority serve any static files.
   app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
 
-  app.use(basicAuth({
+  var router = express.Router();
+
+  router.use(basicAuth({
     users: {
       [USERNAME]: PASSWORD,
     },
   }));
-
-  var router = express.Router()
 
   router.get('/login', async (req, res) => {
     res.status(200).send();

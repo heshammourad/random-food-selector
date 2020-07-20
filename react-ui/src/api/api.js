@@ -2,26 +2,23 @@
 
 import axios from 'axios';
 
-const u = localStorage.getItem('username');
-const p = localStorage.getItem('password');
-
 const instance = axios.create({
   baseURL: '/api',
 });
 
-if (u && p) {
-  instance.defaults.auth.username = u;
-  instance.defaults.auth.password = p;
+const token = localStorage.getItem('token');
+if (token) {
+  const auth = JSON.parse(token);
+  instance.defaults.auth = auth;
 }
 
 export const login = async (username, password) => {
   try {
-    await instance.get('/login', { auth: { username, password } });
+    const auth = { username, password };
+    await instance.get('/login', { auth });
 
-    instance.defaults.auth.username = username;
-    instance.defaults.auth.password = password;
-    localStorage.setItem('username', username);
-    localStorage.setItem('password', password);
+    instance.defaults.auth = auth;
+    localStorage.setItem('token', JSON.stringify(auth));
 
     return true;
   } catch (err) {

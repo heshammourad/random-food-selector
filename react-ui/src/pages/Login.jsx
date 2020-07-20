@@ -8,12 +8,11 @@ import { Redirect } from 'react-router-dom';
 import './Login.css';
 
 const Login = () => {
-  const [isLoggedIn, setLoggedIn] = useState(false);
   const [isError, setIsError] = useState(false);
   const { authToken, setAuthToken } = useAuth();
 
-  if (!isLoggedIn && authToken === process.env.PASSWORD) {
-    setLoggedIn(true);
+  if (authToken) {
+    return <Redirect to="/" />;
   }
 
   const handleSubmit = async (event) => {
@@ -21,17 +20,13 @@ const Login = () => {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     const isValid = await login(username, password);
-    setAuthToken(isValid);
     if (isValid) {
-      setLoggedIn(true);
+      const token = { username, password };
+      setAuthToken(token);
     } else {
       setIsError(true);
     }
   };
-
-  if (isLoggedIn) {
-    return <Redirect to="/" />;
-  }
 
   return (
     <div className="login">
