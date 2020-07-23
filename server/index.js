@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const express = require('express');
 const path = require('path');
 const cluster = require('cluster');
@@ -15,14 +16,13 @@ if (!isDev && cluster.isMaster) {
   console.error(`Node cluster master ${process.pid} is running`);
 
   // Fork workers.
-  for (let i = 0; i < numCPUs; i++) {
+  for (let i = 0; i < numCPUs; i += 1) {
     cluster.fork();
   }
 
   cluster.on('exit', (worker, code, signal) => {
     console.error(`Node cluster worker ${worker.process.pid} exited: code ${code}, signal ${signal}`);
   });
-
 } else {
   const { PASSWORD, USERNAME } = process.env;
 
@@ -33,7 +33,7 @@ if (!isDev && cluster.isMaster) {
   // Priority serve any static files.
   app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
 
-  var router = express.Router();
+  const router = express.Router();
 
   router.use(basicAuth({
     users: {
@@ -62,11 +62,11 @@ if (!isDev && cluster.isMaster) {
   app.use('/api', router);
 
   // All remaining requests return the React app, so it can handle routing.
-  app.get('*', function (request, response) {
+  app.get('*', (request, response) => {
     response.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
   });
 
-  app.listen(PORT, function () {
-    console.error(`Node ${isDev ? 'dev server' : 'cluster worker ' + process.pid}: listening on port ${PORT}`);
+  app.listen(PORT, () => {
+    console.error(`Node ${isDev ? 'dev server' : `cluster worker ${process.pid}`}: listening on port ${PORT}`);
   });
 }
