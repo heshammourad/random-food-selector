@@ -45,11 +45,27 @@ if (!isDev && cluster.isMaster) {
     res.status(200).send();
   });
 
-  router.get('/types', async (req, res) => {
+  router.route('/types').get(async (req, res) => {
     try {
-      const result = await db.query('SELECT * FROM type');
+      const result = await db.select('SELECT * FROM type');
       if (!result) {
         res.status(404).send();
+        return;
+      }
+      res.send(result.rows);
+    } catch (err) {
+      console.error(err.toString());
+      res.status(500).send();
+    }
+  }).post(async ({ name }, res) => {
+    try {
+      if (!name) {
+        res.status(400).send();
+        return;
+      }
+      const result = await db.insert('type', [name], 'id');
+      if (!result) {
+        res.status(500).send();
         return;
       }
       res.send(result.rows);
