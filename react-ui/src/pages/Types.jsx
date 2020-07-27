@@ -1,18 +1,23 @@
-import withData from '../common/WithData';
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
-const Types = ({ data }) => {
+import { postData } from '../api/api';
+import withData from '../common/WithData';
+
+const Types = ({ data, refreshData }) => {
   const [shouldShowAddPanel, setShouldShowAddPanel] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const name = document.getElementById('typeName').value;
     if (name) {
-      // Submit name
+      const response = postData('/types', { name });
+      if (response) {
+        refreshData();
+        setShouldShowAddPanel(false);
+      }
     }
   };
 
@@ -57,6 +62,7 @@ Types.propTypes = {
       name: PropTypes.string,
     }),
   ),
+  refreshData: PropTypes.func.isRequired,
 };
 
 Types.defaultProps = {

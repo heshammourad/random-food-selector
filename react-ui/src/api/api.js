@@ -43,3 +43,12 @@ export const getData = async (path) => {
     return null;
   }
 };
+
+export const postData = async (path, body) => {
+  try {
+    const { data } = await instance.post(path, body);
+    return data;
+  } catch (err) {
+    return null;
+  }
+};
