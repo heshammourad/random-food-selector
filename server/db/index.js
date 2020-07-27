@@ -17,12 +17,23 @@ const select = async (query) => {
   }
 };
 
-const insert = async (table, values, returning) => {
-  const valuesQuery = values.map((cur, idx) => `$${idx + 1}`).join(',');
+const insert = async (table, valueObj, returning) => {
+  const indexArray = [];
+  const values = [];
+  const fields = Object.keys(valueObj).reduce((acc, cur, idx) => {
+    indexArray.push(`$${idx + 1}`);
+    values.push(valueObj[cur]);
+
+    acc.push(cur);
+    return acc;
+  }, []);
+
+  const fieldsQuery = fields.join(',');
+  const valuesQuery = indexArray.join(',');
   let returningQuery = Array.isArray(returning) ? returning : [returning];
   returningQuery = returningQuery.join(',');
 
-  const query = `INSERT INTO ${table} VALUES(${valuesQuery}) RETURNING ${returningQuery}`;
+  const query = `INSERT INTO ${table}(${fieldsQuery}) VALUES(${valuesQuery}) RETURNING ${returningQuery}`;
 
   const client = await pool.connect();
   try {

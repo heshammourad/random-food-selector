@@ -41,6 +41,8 @@ if (!isDev && cluster.isMaster) {
     },
   }));
 
+  router.use(express.json());
+
   router.get('/login', async (req, res) => {
     res.status(200).send();
   });
@@ -57,13 +59,14 @@ if (!isDev && cluster.isMaster) {
       console.error(err.toString());
       res.status(500).send();
     }
-  }).post(async ({ name }, res) => {
+  }).post(async ({ body: { name } }, res) => {
     try {
       if (!name) {
+        console.error('Missing name in request body');
         res.status(400).send();
         return;
       }
-      const result = await db.insert('type', [name], 'id');
+      const result = await db.insert('type', { name }, 'id');
       if (!result) {
         res.status(500).send();
         return;
