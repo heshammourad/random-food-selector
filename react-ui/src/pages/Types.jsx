@@ -9,11 +9,11 @@ import withData from '../common/WithData';
 const Types = ({ data, refreshData }) => {
   const [shouldShowAddPanel, setShouldShowAddPanel] = useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const name = document.getElementById('typeName').value;
     if (name) {
-      const response = postData('/types', { name });
+      const response = await postData('/types', { name });
       if (response) {
         refreshData();
         setShouldShowAddPanel(false);
