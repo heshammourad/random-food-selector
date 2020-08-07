@@ -1,10 +1,11 @@
 /* eslint-disable no-console */
-const express = require('express');
-const path = require('path');
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
-const helmet = require('helmet');
+const path = require('path');
+
+const express = require('express');
 const basicAuth = require('express-basic-auth');
+const helmet = require('helmet');
 
 const db = require('./db');
 

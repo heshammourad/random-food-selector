@@ -1,9 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { useAuth } from '../context/auth';
-
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import PropTypes from 'prop-types';
+
+import { useAuth } from '../context/auth';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const isAuthenticated = useAuth();

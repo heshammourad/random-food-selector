@@ -1,11 +1,11 @@
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+
 import { AuthContext } from './context/auth';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Types from './pages/Types';
 import PrivateRoute from './routing/PrivateRoute';
-
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 const App = () => {
   const existingToken = JSON.parse(localStorage.getItem('token'));

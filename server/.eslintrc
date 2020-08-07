@@ -4,5 +4,17 @@
   },
   "extends": [
     "airbnb-base"
-  ]
+  ],
+  "rules": {
+    "import/order": [
+      "error",
+      {
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": false
+        }
+      }
+    ]
+  }
 }

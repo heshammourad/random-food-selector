@@ -1,9 +1,9 @@
-import { login } from '../api/api';
-import { useAuth } from '../context/auth';
-
 import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
+
+import { login } from '../api/api';
+import { useAuth } from '../context/auth';
 
 import './Login.css';
 
