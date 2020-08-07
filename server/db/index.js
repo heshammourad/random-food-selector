@@ -7,10 +7,10 @@ const pool = new Pool({
   },
 });
 
-const select = async (query) => {
+const select = async (query, values) => {
   const client = await pool.connect();
   try {
-    const result = await client.query(query);
+    const result = await client.query(query, values);
     return result;
   } finally {
     client.release();

@@ -48,13 +48,25 @@ if (!isDev && cluster.isMaster) {
     res.status(200).send();
   });
 
-  router.route('/types').get(async (req, res) => {
+  router.route('/types/:typeId').get(async (req, res) => {
     try {
-      const result = await db.select('SELECT * FROM type');
-      if (!result) {
+      const { typeId } = req.params;
+      const typeResult = await db.select('SELECT name FROM type WHERE id = $1', [typeId]);
+      if (!typeResult.rowCount) {
         res.status(404).send();
         return;
       }
+      const itemsResult = await db.select('SELECT * FROM item');
+      res.send({ name: typeResult.rows[0].name, items: itemsResult.rows });
+    } catch (err) {
+      console.error(err.toString());
+      res.status(500).send();
+    }
+  });
+
+  router.route('/types').get(async (req, res) => {
+    try {
+      const result = await db.select('SELECT * FROM type');
       res.send(result.rows);
     } catch (err) {
       console.error(err.toString());
