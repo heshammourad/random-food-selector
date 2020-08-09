@@ -1,8 +1,9 @@
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Link as RouterLink, BrowserRouter as Router, Route } from 'react-router-dom';
 
 import { AuthContext } from './context/auth';
 import {
@@ -21,7 +22,9 @@ const App = () => {
         <Router>
           <div>
             <Typography component="h1" variant="h5">
-              Random Food Selector
+              <Link component={RouterLink} to="/">
+                Random Food Selector
+              </Link>
             </Typography>
             <Route exact path="/" component={Home} />
             <Route exact path="/login" component={Login} />
