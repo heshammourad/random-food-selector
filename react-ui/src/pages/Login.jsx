@@ -60,7 +60,7 @@ const Login = () => {
             An error occurred. Please try again.
           </Typography>
         )}
-        <Button type="submit" fullWidth variant="contained" color="primary">
+        <Button type="submit" fullWidth variant="contained" color="primary" className="btn-login">
           Log In
         </Button>
       </form>

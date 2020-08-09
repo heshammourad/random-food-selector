@@ -68,7 +68,7 @@
       "git add"
     ],
     "src/**/*.scss": [
-      "yarn stylelint-fix",
+      "stylelint --fix",
       "git add"
     ]
   }
