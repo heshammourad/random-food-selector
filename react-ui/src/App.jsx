@@ -1,3 +1,6 @@
+import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Typography from '@material-ui/core/Typography';
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
@@ -13,14 +16,19 @@ const App = () => {
 
   return (
     <AuthContext.Provider value={{ authToken, setAuthToken }}>
-      <Router>
-        <div>
-          <h1>Random Food Selector</h1>
-          <Route exact path="/" component={Home} />
-          <Route exact path="/login" component={Login} />
-          <PrivateRoute path="/types" component={Types} />
-        </div>
-      </Router>
+      <Container maxWidth="xs">
+        <CssBaseline />
+        <Router>
+          <div>
+            <Typography component="h1" variant="h5">
+              Random Food Selector
+            </Typography>
+            <Route exact path="/" component={Home} />
+            <Route exact path="/login" component={Login} />
+            <PrivateRoute path="/types" component={Types} />
+          </div>
+        </Router>
+      </Container>
     </AuthContext.Provider>
   );
 };

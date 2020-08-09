@@ -1,5 +1,7 @@
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 import React, { useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 
 import { login } from '../api/api';
@@ -30,20 +32,38 @@ const Login = () => {
 
   return (
     <div className="login">
-      <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="username">
-          <Form.Label>Username</Form.Label>
-          <Form.Control type="text" />
-        </Form.Group>
-        <Form.Group controlId="password">
-          <Form.Label>Password</Form.Label>
-          <Form.Control type="password" />
-        </Form.Group>
-        {isError && <div className="error">Please choose a username.</div>}
-        <Button variant="secondary" type="submit">
+      <form onSubmit={handleSubmit}>
+        <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          id="username"
+          label="Username"
+          name="username"
+          autoComplete="username"
+          autoFocus
+        />
+        <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          name="password"
+          label="Password"
+          type="password"
+          id="password"
+          autoComplete="current-password"
+        />
+        {isError && (
+          <Typography color="error" variant="caption">
+            An error occurred. Please try again.
+          </Typography>
+        )}
+        <Button type="submit" fullWidth variant="contained" color="primary">
           Log In
         </Button>
-      </Form>
+      </form>
     </div>
   );
 };
