@@ -11,9 +11,9 @@ import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 
-import { postData } from '../api/api';
-import withData from '../common/WithData';
-import ListItemLink from '../components/ListItemLink';
+import { postData } from '../../api/api';
+import withData from '../../common/WithData';
+import ListItemLink from '../../components/ListItemLink';
 
 import './Types.scss';
 

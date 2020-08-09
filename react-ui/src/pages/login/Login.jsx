@@ -4,8 +4,8 @@ import Typography from '@material-ui/core/Typography';
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 
-import { login } from '../api/api';
-import { useAuth } from '../context/auth';
+import { login } from '../../api/api';
+import { useAuth } from '../../context/auth';
 
 import './Login.css';
 

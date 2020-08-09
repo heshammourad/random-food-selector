@@ -5,9 +5,9 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import { AuthContext } from './context/auth';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Types from './pages/Types';
+import {
+  Home, Login, Type, Types,
+} from './pages';
 import PrivateRoute from './routing/PrivateRoute';
 
 const App = () => {
@@ -25,7 +25,8 @@ const App = () => {
             </Typography>
             <Route exact path="/" component={Home} />
             <Route exact path="/login" component={Login} />
-            <PrivateRoute path="/types" component={Types} />
+            <PrivateRoute exact path="/types" component={Types} />
+            <PrivateRoute path="/types/:typeId" component={Type} />
           </div>
         </Router>
       </Container>
