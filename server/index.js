@@ -71,7 +71,7 @@ if (!isDev && cluster.isMaster) {
         res.status(500).send();
       }
     })
-    .post(async ({ body: { name }, params: { typeId } }, res) => {
+    .post(async ({ body: { name, lastUsedDate }, params: { typeId } }, res) => {
       try {
         if (!name) {
           console.error('Missing name in request body');
@@ -80,7 +80,7 @@ if (!isDev && cluster.isMaster) {
         }
         const result = await db.insert(
           'item',
-          { name, type_id: typeId, last_used_date: new Date() },
+          { name, type_id: typeId, last_used_date: lastUsedDate },
           'id',
         );
         if (!result) {
