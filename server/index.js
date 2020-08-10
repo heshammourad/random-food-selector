@@ -6,11 +6,20 @@ const path = require('path');
 const express = require('express');
 const basicAuth = require('express-basic-auth');
 const helmet = require('helmet');
+const camelCase = require('lodash/camelCase');
 
 const db = require('./db');
 
 const isDev = process.env.NODE_ENV !== 'production';
 const PORT = process.env.PORT || 5000;
+
+const convertToCamelCase = (obj) => Object.keys(obj).reduce(
+  (acc, cur) => ({
+    ...acc,
+    [camelCase(cur)]: obj[cur],
+  }),
+  {},
+);
 
 // Multi-process to utilize all CPU cores.
 if (!isDev && cluster.isMaster) {
@@ -56,16 +65,16 @@ if (!isDev && cluster.isMaster) {
     .route('/types/:typeId')
     .get(async ({ params: { typeId } }, res) => {
       try {
-        const typeResult = await db.select(
-          'SELECT name FROM type WHERE id = $1',
-          [typeId],
-        );
+        const typeResult = await db.select('SELECT name FROM type WHERE id = $1', [typeId]);
         if (!typeResult.rowCount) {
           res.status(404).send();
           return;
         }
         const itemsResult = await db.select('SELECT * FROM item');
-        res.send({ name: typeResult.rows[0].name, items: itemsResult.rows });
+        res.send({
+          name: typeResult.rows[0].name,
+          items: itemsResult.rows.map((obj) => convertToCamelCase(obj)),
+        });
       } catch (err) {
         console.error(err.toString());
         res.status(500).send();
@@ -128,16 +137,12 @@ if (!isDev && cluster.isMaster) {
 
   // All remaining requests return the React app, so it can handle routing.
   app.get('*', (request, response) => {
-    response.sendFile(
-      path.resolve(__dirname, '../react-ui/build', 'index.html'),
-    );
+    response.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
   });
 
   app.listen(PORT, () => {
     console.error(
-      `Node ${
-        isDev ? 'dev server' : `cluster worker ${process.pid}`
-      }: listening on port ${PORT}`,
+      `Node ${isDev ? 'dev server' : `cluster worker ${process.pid}`}: listening on port ${PORT}`,
     );
   });
 }
