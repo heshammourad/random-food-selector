@@ -7,7 +7,7 @@ import { Link as RouterLink, BrowserRouter as Router, Route } from 'react-router
 
 import { AuthContext } from './context/auth';
 import {
-  Home, Login, Type, Types,
+  Home, Items, Login, Types,
 } from './pages';
 import PrivateRoute from './routing/PrivateRoute';
 
@@ -29,7 +29,7 @@ const App = () => {
             <Route exact path="/" component={Home} />
             <Route exact path="/login" component={Login} />
             <PrivateRoute exact path="/types" component={Types} />
-            <PrivateRoute path="/types/:typeId" component={Type} />
+            <PrivateRoute path="/types/:typeId" component={Items} />
           </div>
         </Router>
       </Container>

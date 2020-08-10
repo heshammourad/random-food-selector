@@ -22,7 +22,7 @@ import React, { useState } from 'react';
 import { postData } from '../../api/api';
 import withData from '../../common/WithData';
 
-import './Type.scss';
+import './Items.scss';
 
 const Type = ({
   data,
