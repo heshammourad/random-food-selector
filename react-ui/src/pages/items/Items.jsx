@@ -15,7 +15,10 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import EditIcon from '@material-ui/icons/Edit';
+import differenceInDays from 'date-fns/differenceInDays';
 import format from 'date-fns/format';
+import parseISO from 'date-fns/parseISO';
+import startOfToday from 'date-fns/startOfToday';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 
@@ -40,10 +43,38 @@ const Type = ({
   if (data && data.items) {
     availableItems = data.items
       .filter(({ available }) => available)
+      .map((item) => {
+        const { lastUsedDate: lastUsedDateString } = item;
+        const lastUsedDate = parseISO(lastUsedDateString);
+        const daysSinceLastUse = differenceInDays(startOfToday(), lastUsedDate);
+
+        let daysAgo = 'Last used ';
+        switch (daysSinceLastUse) {
+          case 0:
+            daysAgo += 'today';
+            break;
+          case 1:
+            daysAgo += '1 day ago';
+            break;
+          default:
+            daysAgo += `${daysSinceLastUse} days ago`;
+            break;
+        }
+
+        return { ...item, daysAgo };
+      })
       .sort((a, b) => {
+        const dateA = a.lastUsedDate;
+        const dateB = b.lastUsedDate;
+        if (dateA < dateB) {
+          return -1;
+        }
+        if (dateA > dateB) {
+          return 1;
+        }
+
         const nameA = a.name;
         const nameB = b.name;
-
         if (nameA < nameB) {
           return -1;
         }
@@ -115,7 +146,7 @@ const Type = ({
               {availableItems.length > 0 ? (
                 <Paper elevation={0}>
                   <List>
-                    {availableItems.map(({ id, name }) => {
+                    {availableItems.map(({ daysAgo, id, name }) => {
                       const labelId = `checkbox-list-label-${id}`;
                       return (
                         <ListItem key={id} dense button onClick={handleToggle(id)}>
@@ -128,7 +159,7 @@ const Type = ({
                               inputProps={{ 'aria-labelledby': labelId }}
                             />
                           </ListItemIcon>
-                          <ListItemText id={labelId} primary={name} />
+                          <ListItemText id={labelId} primary={name} secondary={daysAgo} />
                           <ListItemSecondaryAction>
                             <IconButton edge="end" aria-label="edit">
                               <EditIcon />
@@ -189,6 +220,7 @@ Type.propTypes = {
     items: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.number,
+        lastUsedDate: PropTypes.string,
         name: PropTypes.string,
       }),
     ),
