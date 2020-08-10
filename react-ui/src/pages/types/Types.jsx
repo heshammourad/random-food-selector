@@ -62,13 +62,13 @@ const Types = ({ data, refreshData }) => {
         <Paper elevation={0}>
           <List>
             {data.map(({ id, name }) => (
-              <ListItemLink to={`/types/${id}`} primary={name} />
+              <ListItemLink key={id} to={`/types/${id}`} primary={name} />
             ))}
           </List>
         </Paper>
       )}
       <Button
-        color="primary"
+        color="secondary"
         variant="outlined"
         onClick={handleAddNewType}
         className="btn-add-new-type"
