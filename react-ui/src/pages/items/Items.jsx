@@ -5,6 +5,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -14,6 +15,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import differenceInDays from 'date-fns/differenceInDays';
 import format from 'date-fns/format';
@@ -140,9 +142,50 @@ const Type = ({
         <>
           {data.name && (
             <>
-              <Typography component="h2" variant="h6">
-                {data.name}
-              </Typography>
+              <Grid container alignItems="baseline" className="header">
+                <Grid item xs>
+                  <Typography component="h2" variant="h6">
+                    {data.name}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <IconButton
+                    color="primary"
+                    component="span"
+                    size="small"
+                    onClick={handleAddNewItem}
+                  >
+                    <AddIcon />
+                  </IconButton>
+                </Grid>
+              </Grid>
+              <Dialog open={isDialogOpen} onClose={handleDialogClose}>
+                <DialogTitle>New Item</DialogTitle>
+                <DialogContent>
+                  <TextField
+                    autoFocus
+                    error={nameError}
+                    helperText={nameError}
+                    required
+                    onChange={clearErrors}
+                    margin="dense"
+                    id="itemName"
+                    label="Name"
+                    fullWidth
+                  />
+                  {dialogError && (
+                    <DialogContentText color="error">{dialogError}</DialogContentText>
+                  )}
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleDialogClose} color="secondary">
+                    Cancel
+                  </Button>
+                  <Button onClick={handleSubmit} color="primary">
+                    Submit
+                  </Button>
+                </DialogActions>
+              </Dialog>
               {availableItems.length > 0 ? (
                 <Paper elevation={0}>
                   <List>
@@ -175,39 +218,6 @@ const Type = ({
               )}
             </>
           )}
-          <Button
-            color="secondary"
-            variant="outlined"
-            onClick={handleAddNewItem}
-            className="btn-add-new-item"
-          >
-            Add New Item
-          </Button>
-          <Dialog open={isDialogOpen} onClose={handleDialogClose}>
-            <DialogTitle>New Item</DialogTitle>
-            <DialogContent>
-              <TextField
-                autoFocus
-                error={nameError}
-                helperText={nameError}
-                required
-                onChange={clearErrors}
-                margin="dense"
-                id="itemName"
-                label="Name"
-                fullWidth
-              />
-              {dialogError && <DialogContentText color="error">{dialogError}</DialogContentText>}
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleDialogClose} color="secondary">
-                Cancel
-              </Button>
-              <Button onClick={handleSubmit} color="primary">
-                Submit
-              </Button>
-            </DialogActions>
-          </Dialog>
         </>
       )}
     </div>
