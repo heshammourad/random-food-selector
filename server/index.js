@@ -70,7 +70,7 @@ if (!isDev && cluster.isMaster) {
           res.status(404).send();
           return;
         }
-        const itemsResult = await db.select('SELECT * FROM item');
+        const itemsResult = await db.select('SELECT * FROM item WHERE type_id = $1', [typeId]);
         res.send({
           name: typeResult.rows[0].name,
           items: itemsResult.rows.map((obj) => convertToCamelCase(obj)),
