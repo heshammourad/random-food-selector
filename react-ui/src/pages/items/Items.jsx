@@ -37,16 +37,18 @@ const Type = ({
   refreshData,
 }) => {
   const [isDialogOpen, setDialogOpen] = useState(false);
+  const [isInitialLoad, setInitialLoad] = useState(false);
   const [checked, setChecked] = useState([]);
   const [nameError, setNameError] = useState(null);
   const [dialogError, setDialogError] = useState(null);
 
   let availableItems = [];
   if (data && data.items) {
+    const initialChecked = [];
     availableItems = data.items
       .filter(({ available }) => available)
       .map((item) => {
-        const { lastUsedDate: lastUsedDateString } = item;
+        const { id, lastUsedDate: lastUsedDateString } = item;
         const lastUsedDate = parseISO(lastUsedDateString);
         const daysSinceLastUse = differenceInDays(startOfToday(), lastUsedDate);
 
@@ -59,6 +61,7 @@ const Type = ({
             daysAgo += '1 day ago';
             break;
           default:
+            initialChecked.push(id);
             daysAgo += `${daysSinceLastUse} days ago`;
             break;
         }
@@ -85,6 +88,10 @@ const Type = ({
         }
         return 0;
       });
+    if (availableItems.length && !isInitialLoad) {
+      setInitialLoad(true);
+      setChecked(initialChecked);
+    }
   }
 
   const handleToggle = (value) => () => {
