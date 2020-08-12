@@ -18,10 +18,11 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 
 import { postData } from '../../api/api';
-import withData from '../../common';
+import { withData } from '../../common';
+
+import ItemDialog from './ItemDialog';
 
 import './Items.scss';
-import ItemDialog from './ItemDialog';
 
 const Type = ({
   data,

@@ -1,2 +1,2 @@
 /* eslint-disable import/prefer-default-export */
-export { default as WithData } from './WithData';
+export { default as withData } from './WithData';
