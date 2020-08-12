@@ -18,7 +18,7 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 
 import { postData } from '../../api/api';
-import withData from '../../common/WithData';
+import withData from '../../common';
 
 import './Items.scss';
 import ItemDialog from './ItemDialog';

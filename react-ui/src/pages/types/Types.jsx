@@ -12,8 +12,8 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 
 import { postData } from '../../api/api';
-import withData from '../../common/WithData';
-import ListItemLink from '../../components/ListItemLink';
+import withData from '../../common';
+import ListItemLink from '../../components';
 
 import './Types.scss';
 
