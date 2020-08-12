@@ -1,10 +1,4 @@
-import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
@@ -13,7 +7,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
@@ -28,6 +21,7 @@ import { postData } from '../../api/api';
 import withData from '../../common/WithData';
 
 import './Items.scss';
+import ItemDialog from './ItemDialog';
 
 const Type = ({
   data,
@@ -166,33 +160,14 @@ const Type = ({
                   </IconButton>
                 </Grid>
               </Grid>
-              <Dialog open={isDialogOpen} onClose={handleDialogClose}>
-                <DialogTitle>New Item</DialogTitle>
-                <DialogContent>
-                  <TextField
-                    autoFocus
-                    error={nameError}
-                    helperText={nameError}
-                    required
-                    onChange={clearErrors}
-                    margin="dense"
-                    id="itemName"
-                    label="Name"
-                    fullWidth
-                  />
-                  {dialogError && (
-                    <DialogContentText color="error">{dialogError}</DialogContentText>
-                  )}
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleDialogClose} color="secondary">
-                    Cancel
-                  </Button>
-                  <Button onClick={handleSubmit} color="primary">
-                    Submit
-                  </Button>
-                </DialogActions>
-              </Dialog>
+              <ItemDialog
+                clearErrors={clearErrors}
+                dialogError={dialogError}
+                isDialogOpen={isDialogOpen}
+                nameError={nameError}
+                onDialogClose={handleDialogClose}
+                onSubmit={handleSubmit}
+              />
               {availableItems.length > 0 ? (
                 <Paper elevation={0}>
                   <List>
