@@ -14,7 +14,7 @@ import differenceInDays from 'date-fns/differenceInDays';
 import parseISO from 'date-fns/parseISO';
 import startOfToday from 'date-fns/startOfToday';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { postData, patchData } from '../../api/api';
 import { withData } from '../../common';
@@ -30,62 +30,61 @@ const Type = ({
   },
   refreshData,
 }) => {
+  const [availableItems, setAvailableItems] = useState([]);
   const [isDialogOpen, setDialogOpen] = useState(false);
-  const [isInitialLoad, setInitialLoad] = useState(false);
   const [checked, setChecked] = useState([]);
   const [dialogError, setDialogError] = useState(null);
 
-  let availableItems = [];
-  if (data && data.items) {
-    const initialChecked = [];
-    availableItems = data.items
-      .filter(({ available }) => available)
-      .map((item) => {
-        const { id, lastUsedDate: lastUsedDateString } = item;
-        const lastUsedDate = parseISO(lastUsedDateString);
-        const daysSinceLastUse = differenceInDays(startOfToday(), lastUsedDate);
+  useEffect(() => {
+    if (data && data.items) {
+      const initialChecked = [];
+      const newAvailableItems = data.items
+        .filter(({ available }) => available)
+        .map((item) => {
+          const { id, lastUsedDate: lastUsedDateString } = item;
+          const lastUsedDate = parseISO(lastUsedDateString);
+          const daysSinceLastUse = differenceInDays(startOfToday(), lastUsedDate);
 
-        let daysAgo = 'Last used ';
-        switch (daysSinceLastUse) {
-          case 0:
-            daysAgo += 'today';
-            break;
-          case 1:
-            daysAgo += '1 day ago';
-            break;
-          default:
-            initialChecked.push(id);
-            daysAgo += `${daysSinceLastUse} days ago`;
-            break;
-        }
+          let daysAgo = 'Last used ';
+          switch (daysSinceLastUse) {
+            case 0:
+              daysAgo += 'today';
+              break;
+            case 1:
+              daysAgo += '1 day ago';
+              break;
+            default:
+              initialChecked.push(id);
+              daysAgo += `${daysSinceLastUse} days ago`;
+              break;
+          }
 
-        return { ...item, daysAgo };
-      })
-      .sort((a, b) => {
-        const dateA = a.lastUsedDate;
-        const dateB = b.lastUsedDate;
-        if (dateA < dateB) {
-          return -1;
-        }
-        if (dateA > dateB) {
-          return 1;
-        }
+          return { ...item, daysAgo };
+        })
+        .sort((a, b) => {
+          const dateA = a.lastUsedDate;
+          const dateB = b.lastUsedDate;
+          if (dateA < dateB) {
+            return -1;
+          }
+          if (dateA > dateB) {
+            return 1;
+          }
 
-        const nameA = a.name;
-        const nameB = b.name;
-        if (nameA < nameB) {
-          return -1;
-        }
-        if (nameA > nameB) {
-          return 1;
-        }
-        return 0;
-      });
-    if (availableItems.length && !isInitialLoad) {
-      setInitialLoad(true);
+          const nameA = a.name;
+          const nameB = b.name;
+          if (nameA < nameB) {
+            return -1;
+          }
+          if (nameA > nameB) {
+            return 1;
+          }
+          return 0;
+        });
+      setAvailableItems(newAvailableItems);
       setChecked(initialChecked);
     }
-  }
+  }, [data]);
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
