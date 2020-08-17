@@ -82,8 +82,8 @@ if (!isDev && cluster.isMaster) {
     })
     .post(async ({ body: { name, lastUsedDate }, params: { typeId } }, res) => {
       try {
-        if (!name) {
-          console.error('Missing name in request body');
+        if (!typeId || !name || !lastUsedDate) {
+          console.error('Bad request');
           res.status(400).send();
           return;
         }
@@ -97,6 +97,29 @@ if (!isDev && cluster.isMaster) {
           return;
         }
         res.send(result.rows);
+      } catch (err) {
+        console.error(err.toString());
+        res.status(500).send();
+      }
+    })
+    .patch(async ({
+      body: {
+        id, name, lastUsedDate, isAvailable,
+      }, params: { typeId },
+    }, res) => {
+      try {
+        if (!typeId || !id) {
+          console.error('Bad request');
+          res.status(400).send();
+          return;
+        }
+        const fields = { name, last_used_date: lastUsedDate, available: isAvailable };
+        const result = await db.update('item', fields, 'id', id);
+        if (!result) {
+          res.status(500).send();
+          return;
+        }
+        res.status(204).send();
       } catch (err) {
         console.error(err.toString());
         res.status(500).send();
