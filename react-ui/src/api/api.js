@@ -52,3 +52,12 @@ export const postData = async (path, body) => {
     return null;
   }
 };
+
+export const patchData = async (path, body) => {
+  try {
+    await instance.patch(path, body);
+    return true;
+  } catch (err) {
+    return false;
+  }
+};

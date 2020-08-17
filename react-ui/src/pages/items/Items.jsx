@@ -11,13 +11,12 @@ import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import differenceInDays from 'date-fns/differenceInDays';
-import format from 'date-fns/format';
 import parseISO from 'date-fns/parseISO';
 import startOfToday from 'date-fns/startOfToday';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 
-import { postData } from '../../api/api';
+import { postData, patchData } from '../../api/api';
 import { withData } from '../../common';
 
 import ItemDialog from './ItemDialog';
@@ -109,15 +108,16 @@ const Type = ({
     setDialogOpen(false);
   };
 
-  const handleSubmit = async ({ id, name, date }) => {
+  const typesUrl = `types/${typeId}`;
+
+  const handleSubmit = async ({ id, ...values }) => {
     setDialogError(null);
 
-    const lastUsedDate = format(date, 'yyyy-MM-dd');
     let response;
     if (id) {
-      // TODO: Handle put/patch
+      response = await patchData(typesUrl, { id, ...values });
     } else {
-      response = await postData(`types/${typeId}`, { name, lastUsedDate });
+      response = await postData(typesUrl, { ...values });
     }
 
     if (response) {

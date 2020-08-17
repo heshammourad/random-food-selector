@@ -7,6 +7,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import { DatePicker } from '@material-ui/pickers';
+import format from 'date-fns/format';
 import subMonths from 'date-fns/subMonths';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
@@ -20,6 +21,7 @@ const ItemDialog = ({
   const [value, setValue] = useState(null);
   const [date, setDate] = useState(today);
   const [nameError, setNameError] = useState(null);
+  const [isAvailable] = useState(true);
 
   const resetValues = () => {
     setValue(null);
@@ -39,7 +41,7 @@ const ItemDialog = ({
 
     event.preventDefault();
     resetValues();
-    onSubmit({ ...value, date });
+    onSubmit({ ...value, lastUsedDate: format(date, 'yyyy-MM-dd'), isAvailable });
   };
 
   return (
