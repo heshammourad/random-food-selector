@@ -115,13 +115,12 @@ const Type = ({
     setDialogError(null);
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async (date) => {
     clearErrors();
 
     const name = document.getElementById('itemName').value;
     if (name) {
-      const lastUsedDate = format(new Date(), 'yyyy-MM-dd');
+      const lastUsedDate = format(date, 'yyyy-MM-dd');
       const response = await postData(`types/${typeId}`, { name, lastUsedDate });
       if (response) {
         refreshData();

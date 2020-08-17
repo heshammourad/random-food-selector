@@ -5,7 +5,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
-import { DatePicker } from '@material-ui/pickers/';
+import { DatePicker } from '@material-ui/pickers';
 import subMonths from 'date-fns/subMonths';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
@@ -20,6 +20,12 @@ const ItemDialog = ({
 }) => {
   const today = new Date();
   const [date, handleDateChange] = useState(today);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    onSubmit(date);
+  };
+
   return (
     <Dialog open={isDialogOpen} onClose={onDialogClose}>
       <DialogTitle>New Item</DialogTitle>
@@ -42,6 +48,7 @@ const ItemDialog = ({
           minDate={subMonths(today, 1)}
           margin="dense"
           label="Date"
+          id="date"
           fullWidth
         />
         {dialogError && <DialogContentText color="error">{dialogError}</DialogContentText>}
@@ -50,7 +57,7 @@ const ItemDialog = ({
         <Button onClick={onDialogClose} color="secondary">
           Cancel
         </Button>
-        <Button onClick={onSubmit} color="primary">
+        <Button onClick={handleSubmit} color="primary">
           Submit
         </Button>
       </DialogActions>
