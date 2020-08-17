@@ -34,7 +34,6 @@ const Type = ({
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [isInitialLoad, setInitialLoad] = useState(false);
   const [checked, setChecked] = useState([]);
-  const [nameError, setNameError] = useState(null);
   const [dialogError, setDialogError] = useState(null);
 
   let availableItems = [];
@@ -110,26 +109,22 @@ const Type = ({
     setDialogOpen(false);
   };
 
-  const clearErrors = () => {
-    setNameError(null);
+  const handleSubmit = async ({ id, name, date }) => {
     setDialogError(null);
-  };
 
-  const handleSubmit = async (date) => {
-    clearErrors();
-
-    const name = document.getElementById('itemName').value;
-    if (name) {
-      const lastUsedDate = format(date, 'yyyy-MM-dd');
-      const response = await postData(`types/${typeId}`, { name, lastUsedDate });
-      if (response) {
-        refreshData();
-        setDialogOpen(false);
-      } else {
-        setDialogError('Something went wrong');
-      }
+    const lastUsedDate = format(date, 'yyyy-MM-dd');
+    let response;
+    if (id) {
+      // TODO: Handle put/patch
     } else {
-      setNameError('Please enter a name');
+      response = await postData(`types/${typeId}`, { name, lastUsedDate });
+    }
+
+    if (response) {
+      refreshData();
+      setDialogOpen(false);
+    } else {
+      setDialogError('Something went wrong');
     }
   };
 
@@ -161,12 +156,11 @@ const Type = ({
                 </Grid>
               </Grid>
               <ItemDialog
-                clearErrors={clearErrors}
                 dialogError={dialogError}
                 isDialogOpen={isDialogOpen}
-                nameError={nameError}
                 onDialogClose={handleDialogClose}
                 onSubmit={handleSubmit}
+                options={data.items.filter(({ available }) => !available)}
               />
               {availableItems.length > 0 ? (
                 <Paper elevation={0}>
