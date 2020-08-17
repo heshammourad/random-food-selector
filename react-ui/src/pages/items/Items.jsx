@@ -23,6 +23,18 @@ import ItemDialog from './ItemDialog';
 
 import './Items.scss';
 
+const sortByName = (a, b) => {
+  const nameA = a.name;
+  const nameB = b.name;
+  if (nameA < nameB) {
+    return -1;
+  }
+  if (nameA > nameB) {
+    return 1;
+  }
+  return 0;
+};
+
 const Type = ({
   data,
   match: {
@@ -31,8 +43,10 @@ const Type = ({
   refreshData,
 }) => {
   const [availableItems, setAvailableItems] = useState([]);
-  const [isDialogOpen, setDialogOpen] = useState(false);
   const [checked, setChecked] = useState([]);
+
+  const [isDialogOpen, setDialogOpen] = useState(false);
+  const [editItem, setEditItem] = useState(null);
   const [dialogError, setDialogError] = useState(null);
 
   useEffect(() => {
@@ -71,20 +85,22 @@ const Type = ({
             return 1;
           }
 
-          const nameA = a.name;
-          const nameB = b.name;
-          if (nameA < nameB) {
-            return -1;
-          }
-          if (nameA > nameB) {
-            return 1;
-          }
-          return 0;
+          return sortByName(a, b);
         });
       setAvailableItems(newAvailableItems);
       setChecked(initialChecked);
     }
   }, [data]);
+
+  const handleAddNewItem = () => {
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+    setEditItem(null);
+    setDialogError(null);
+  };
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -99,12 +115,10 @@ const Type = ({
     setChecked(newChecked);
   };
 
-  const handleAddNewItem = () => {
+  const handleEditItem = (itemId) => () => {
+    const item = data.items.find(({ id }) => id === itemId);
+    setEditItem(item);
     setDialogOpen(true);
-  };
-
-  const handleDialogClose = () => {
-    setDialogOpen(false);
   };
 
   const typesUrl = `types/${typeId}`;
@@ -156,10 +170,11 @@ const Type = ({
               </Grid>
               <ItemDialog
                 dialogError={dialogError}
+                editItem={editItem}
                 isDialogOpen={isDialogOpen}
                 onDialogClose={handleDialogClose}
                 onSubmit={handleSubmit}
-                options={data.items.filter(({ available }) => !available)}
+                options={data.items.filter(({ available }) => !available).sort(sortByName)}
               />
               {availableItems.length > 0 ? (
                 <Paper elevation={0}>
@@ -179,7 +194,7 @@ const Type = ({
                           </ListItemIcon>
                           <ListItemText id={labelId} primary={name} secondary={daysAgo} />
                           <ListItemSecondaryAction>
-                            <IconButton edge="end" aria-label="edit">
+                            <IconButton edge="end" aria-label="edit" onClick={handleEditItem(id)}>
                               <EditIcon />
                             </IconButton>
                           </ListItemSecondaryAction>
