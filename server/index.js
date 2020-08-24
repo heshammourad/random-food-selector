@@ -73,7 +73,13 @@ if (!isDev && cluster.isMaster) {
         const itemsResult = await db.select('SELECT * FROM item WHERE type_id = $1', [typeId]);
         res.send({
           name: typeResult.rows[0].name,
-          items: itemsResult.rows.map((obj) => convertToCamelCase(obj)),
+          items: itemsResult.rows.map((obj) => {
+            const response = convertToCamelCase(obj);
+            return {
+              ...response,
+              lastUsedDate: response.lastUsedDate.toJSON().substr(0, 10),
+            };
+          }),
         });
       } catch (err) {
         console.error(err.toString());
