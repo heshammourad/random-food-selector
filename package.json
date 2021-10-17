@@ -39,11 +39,11 @@
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-react": "^7.20.3",
     "eslint-plugin-react-hooks": "^4.0.8",
-    "husky": "^4.2.5",
+    "husky": "^7.0.2",
     "lint-staged": "^10.2.11",
     "nodemon": "^2.0.4",
     "prettier": "^2.0.5",
-    "prettier-eslint": "^11.0.0",
+    "prettier-eslint": "^13.0.0",
     "prettier-eslint-cli": "^5.0.0"
   },
   "husky": {
